@@ -1,9 +1,10 @@
+/* eslint-disable no-nested-ternary */
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import { firebase } from '../firebase';
 import { collatedTasksExist } from '../helpers';
 
-export const useTasks = (selectedProject) => {
+export const useTasks = selectedProject => {
   const [tasks, setTasks] = useState([]);
   const [archivedTasks, setArchivedTasks] = useState([]);
 
@@ -11,7 +12,7 @@ export const useTasks = (selectedProject) => {
     let unsubscribe = firebase
       .firestore()
       .collection('tasks')
-      .where('userId', '==', '27899361dd634a5588f118ab41566ad0');
+      .where('userId', '==', 'jlIFXIwyAL3tzHMtzRbw');
 
     unsubscribe =
       selectedProject && !collatedTasksExist(selectedProject)
@@ -26,8 +27,8 @@ export const useTasks = (selectedProject) => {
         ? (unsubscribe = unsubscribe.where('date', '==', ''))
         : unsubscribe;
 
-    unsubscribe = unsubscribe.onSnapshot((snapshot) => {
-      const newTasks = snapshot.docs.map((task) => ({
+    unsubscribe = unsubscribe.onSnapshot(snapshot => {
+      const newTasks = snapshot.docs.map(task => ({
         id: task.id,
         ...task.data(),
       }));
@@ -35,13 +36,13 @@ export const useTasks = (selectedProject) => {
       setTasks(
         selectedProject === 'NEXT_7'
           ? newTasks.filter(
-              (task) =>
+              task =>
                 moment(task.date, 'DD-MM-YYYY').diff(moment(), 'days') <= 7 &&
                 task.archived !== true
             )
-          : newTasks.filter((task) => task.archived !== true)
+          : newTasks.filter(task => task.archived !== true)
       );
-      setArchivedTasks(newTasks.filter((task) => task.archived !== false));
+      setArchivedTasks(newTasks.filter(task => task.archived !== false));
     });
 
     return () => unsubscribe();
@@ -57,11 +58,11 @@ export const useProjects = () => {
     firebase
       .firestore()
       .collection('projects')
-      .where('userId', '==', '27899361dd634a5588f118ab41566ad0')
+      .where('userId', '==', 'jlIFXIwyAL3tzHMtzRbw')
       .orderBy('projectId')
       .get()
-      .then((snapshot) => {
-        const allProjects = snapshot.docs.map((project) => ({
+      .then(snapshot => {
+        const allProjects = snapshot.docs.map(project => ({
           ...project.data(),
           docId: project.id,
         }));
