@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { FaRegListAlt, FaRegCalendarAlt } from 'react-icons/fa';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import { firebase } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 import { useSelectedProjectValue } from '../context';
 import { ProjectOverlay } from './ProjectOverlay';
 import { TaskDate } from './TaskDate';
@@ -35,10 +36,7 @@ export const AddTask = ({
     return (
       task &&
       projectId &&
-      firebase
-        .firestore()
-        .collection('tasks')
-        .add({
+      addDoc(collection(db, 'tasks'), {
           archived: false,
           projectId,
           task,
