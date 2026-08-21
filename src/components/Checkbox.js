@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { firebase } from '../firebase';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export const Checkbox = ({ id, taskDesc }) => {
   const archiveTask = () => {
-    firebase.firestore().collection('tasks').doc(id).update({
+    updateDoc(doc(db, 'tasks', id), {
       archived: true,
     });
   };
